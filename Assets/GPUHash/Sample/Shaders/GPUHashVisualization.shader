@@ -13,7 +13,7 @@
             #pragma fragment frag
 
             #include "UnityCG.cginc"
-            #include "Assets/GPUHash/Common.cginc"
+            #include "Assets/GPUHash/GPUHash.cginc"
 
             struct appdata
             {
