@@ -26,7 +26,7 @@ namespace GPUHash.Sample
                 _iGPUHashType = CreateIGPUHashTypeInstance(_gpuHashType);
                 _preGPUHashType = _gpuHashType;
             }
-            _iGPUHashType.Update();
+            _iGPUHashType.CheckHashType();
         }
 
         private IGPUHashType CreateIGPUHashTypeInstance(GPUHashType gpuHashType)
