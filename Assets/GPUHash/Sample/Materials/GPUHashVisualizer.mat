@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GPUHashVIsualization
+  m_Name: GPUHashVisualizer
   m_Shader: {fileID: 4800000, guid: 746bacf5795ab47fd91454b4de8b074f, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4

@@ -1,4 +1,4 @@
-﻿Shader "Unlit/GPUHashVisualization"
+﻿Shader "Unlit/GPUHash1To3FloatVisualizer"
 {
     Properties{ }
     SubShader
@@ -13,7 +13,8 @@
             #pragma fragment frag
 
             #include "UnityCG.cginc"
-            #include "Assets/GPUHash/GPUHash.cginc"
+            #include "Assets/GPUHash/HashUtility.cginc"
+            #include "Assets/GPUHash/Hash1To3Float.cginc"
 
             struct appdata
             {
@@ -37,8 +38,8 @@
 
             float4 frag (v2f i) : SV_Target
             {
-                float c = pcg(i.vertex.x) * pcg(i.vertex.y) / float(0xffffffffu);
-                return float4(c, c, c, 1.0);
+                float3 c = hashwithoutsine31(i.uv.x);
+                return float4(c, 1.0);
             }
             ENDCG
         }

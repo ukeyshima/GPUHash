@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace GPUHash.Sample
@@ -6,8 +7,11 @@ namespace GPUHash.Sample
 
     public interface IGPUHashType
     {
+        string ShaderPath { get; }
+        string HashType { get; }
+        string HashTypeDefault { get; }
         void CheckHashType();
-        void OnChangedHashType();
+        Action OnChangedHashType { set; }
     }
 
     [System.Serializable]
@@ -16,8 +20,12 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { hashwithoutsine11 }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash1To1FloatVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 
     [System.Serializable]
@@ -26,8 +34,12 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { bbs, city, esgtsa, iqint1, lcg, murmur3, pcg, ranlim32, superfast, wang, xorshift32, xxhash32 }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash1To1UIntVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 
     [System.Serializable]
@@ -36,8 +48,12 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { hashwithoutsine21 }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash1To2FloatVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 
     [System.Serializable]
@@ -46,8 +62,12 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { hashwithoutsine31 }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash1To3FloatVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 
     [System.Serializable]
@@ -56,8 +76,12 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { hashwithoutsine41 }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash1To4FloatVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 
     [System.Serializable]
@@ -66,8 +90,12 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { fast, hashwithoutsine12, ign, pseudo, trig }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash2To1FloatVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 
     [System.Serializable]
@@ -76,8 +104,12 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { city, iqint3, jkiss32, murmur3, superfast, xxhash32 }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash2To1UIntVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 
     [System.Serializable]
@@ -86,8 +118,12 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { hashwithoutsine22 }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash2To2FloatVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 
     [System.Serializable]
@@ -96,8 +132,12 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { pcg2d, tea }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash2To2UintVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 
     [System.Serializable]
@@ -106,8 +146,12 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { hashwithoutsine32 }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash2To3FloatVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 
     [System.Serializable]
@@ -116,8 +160,12 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { hashwithoutsine42 }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash2To4FloatVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 
     [System.Serializable]
@@ -126,8 +174,12 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { hashwithoutsine13 }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash3To1FloatVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 
     [System.Serializable]
@@ -136,8 +188,12 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { city, superfast, xxhash32, murmur3 }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash3To1UIntVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 
     [System.Serializable]
@@ -146,8 +202,12 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { hashwithoutsine23 }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash3To2FloatVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 
     [System.Serializable]
@@ -156,8 +216,12 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { hashwithoutsine33 }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash3To3FloatVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 
     [System.Serializable]
@@ -166,8 +230,12 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { iqint2, pcg3d, pcg3d16 }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash3To3UintVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 
     [System.Serializable]
@@ -176,8 +244,12 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { hashwithoutsine43 }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash3To4FloatVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 
     [System.Serializable]
@@ -186,8 +258,12 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { city, hybridtaus, murmur3, superfast, xorshift128, xxhash32 }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash4To1UIntVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 
     [System.Serializable]
@@ -196,8 +272,12 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { hashwithoutsine44 }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash4To4FloatVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 
     [System.Serializable]
@@ -206,7 +286,11 @@ namespace GPUHash.Sample
         public Hash _hash;
         private Hash _preHash;
         public enum Hash { md5, pcg4d }
-        public void CheckHashType() { if (_hash != _preHash) { OnChangedHashType(); _preHash = _hash; } }
-        public void OnChangedHashType() { }
+        private Action _onChangedHashType;
+        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash4To4UintVisualizer.shader";
+        public string HashType => _hash.ToString();
+        public string HashTypeDefault => ((Hash)0).ToString();
+        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
     }
 }

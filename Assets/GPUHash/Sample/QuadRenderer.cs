@@ -12,6 +12,9 @@ namespace GPUHash.Sample
         private Matrix4x4 _quadMatrix = Matrix4x4.identity;
         private Vector2Int _screenResolution = new Vector2Int(0, 0);
 
+        public Material Mat { set => _mat = value; }
+
+
         private void Update()
         {
             Graphics.DrawMesh(_quad, _quadMatrix, _mat, 0);

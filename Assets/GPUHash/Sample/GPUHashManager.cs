@@ -1,6 +1,8 @@
-﻿using System;
+﻿using System.Diagnostics;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace GPUHash.Sample
@@ -8,14 +10,15 @@ namespace GPUHash.Sample
     public class GPUHashManager : MonoBehaviour
     {
         [SerializeField] private GPUHashType _gpuHashType;
-        [SerializeField] private Material _mat;
+        [SerializeField] private QuadRenderer _quadRenderer;
         [SerializeReference] private IGPUHashType _iGPUHashType;
 
         private GPUHashType _preGPUHashType;
+        private RuntimeShaderCreator _runTimeShaderCreator;
 
         private void Start()
         {
-            _iGPUHashType = CreateIGPUHashTypeInstance(_gpuHashType);
+            InitIGPUHashType();
             _preGPUHashType = _gpuHashType;
         }
 
@@ -23,10 +26,23 @@ namespace GPUHash.Sample
         {
             if (_preGPUHashType != _gpuHashType)
             {
-                _iGPUHashType = CreateIGPUHashTypeInstance(_gpuHashType);
+                InitIGPUHashType();
                 _preGPUHashType = _gpuHashType;
             }
             _iGPUHashType.CheckHashType();
+        }
+
+        private void OnDestroy()
+        {
+            _runTimeShaderCreator.Dispose();
+        }
+
+        private void InitIGPUHashType()
+        {
+            _iGPUHashType = CreateIGPUHashTypeInstance(_gpuHashType);
+            _runTimeShaderCreator = new RuntimeShaderCreator(File.ReadAllText(_iGPUHashType.ShaderPath), "GPUHashVisualizer");
+            _runTimeShaderCreator.Create(_iGPUHashType.HashTypeDefault, _iGPUHashType.HashType, shader => _quadRenderer.Mat = new Material(shader));
+            _iGPUHashType.OnChangedHashType = () => _runTimeShaderCreator.Create(_iGPUHashType.HashTypeDefault, _iGPUHashType.HashType, shader => _quadRenderer.Mat = new Material(shader));
         }
 
         private IGPUHashType CreateIGPUHashTypeInstance(GPUHashType gpuHashType)
