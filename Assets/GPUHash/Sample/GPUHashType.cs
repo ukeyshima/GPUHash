@@ -1,3 +1,4 @@
+using System.Security.AccessControl;
 using System;
 using UnityEngine;
 
@@ -10,287 +11,258 @@ namespace GPUHash.Sample
         string ShaderPath { get; }
         string HashType { get; }
         string HashTypeDefault { get; }
-        void CheckHashType();
         Action OnChangedHashType { set; }
+        void CheckHashType();
+    }
+
+    public class GPUHashTypeBase : IGPUHashType
+    {
+        private string _preHashType;
+        private Action _onChangedHashType;
+        public virtual string ShaderPath => "";
+        public virtual string HashType => "";
+        public virtual string HashTypeDefault => "";
+        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        public void CheckHashType(){ if (HashType != _preHashType) { _onChangedHashType(); _preHashType = HashType; } }
     }
 
     [System.Serializable]
-    class GPUHashFloat1To1 : IGPUHashType
+    public class GPUHashFloat1To1 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { hashwithoutsine11 }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash1To1FloatVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash1To1FloatVisualizer.shader";
+        [SerializeField, Strings("hashwithoutsine11")]
+        private string _hashType;
+        private string _hashTypeDefault = "hashwithoutsine11";
+        public override string ShaderPath => _shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 
     [System.Serializable]
-    class GPUHashUint1To1 : IGPUHashType
+    public class GPUHashUint1To1 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { bbs, city, esgtsa, iqint1, lcg, murmur3, pcg, ranlim32, superfast, wang, xorshift32, xxhash32 }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash1To1UIntVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash1To1UIntVisualizer.shader";
+        [SerializeField, Strings("bbs", "city", "esgtsa", "iqint1", "lcg", "murmur3", "pcg", "ranlim32", "superfast", "wang", "xorshift32", "xxhash32")]
+        private string _hashType;
+        private string _hashTypeDefault = "bbs";
+        public override string ShaderPath => _shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 
     [System.Serializable]
-    class GPUHashFloat1To2 : IGPUHashType
+    public class GPUHashFloat1To2 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { hashwithoutsine21 }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash1To2FloatVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath = "Assets/GPUHash/Sample/Shaders/GPUHash1To2FloatVisualizer.shader";
+        [SerializeField, Strings("hashwithoutsine21")]
+        private string _hashType;
+        private string _hashTypeDefault = "hashwithoutsine21";
+        public override string ShaderPath => _shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 
     [System.Serializable]
-    class GPUHashFloat1To3 : IGPUHashType
+    public class GPUHashFloat1To3 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { hashwithoutsine31 }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash1To3FloatVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath = "Assets/GPUHash/Sample/Shaders/GPUHash1To3FloatVisualizer.shader";
+        [SerializeField, Strings("hashwithoutsine31")]
+        private string _hashType;
+        private string _hashTypeDefault = "hashwithoutsine31";
+        public override string ShaderPath => _shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 
     [System.Serializable]
-    class GPUHashFloat1To4 : IGPUHashType
+    public class GPUHashFloat1To4 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { hashwithoutsine41 }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash1To4FloatVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath = "Assets/GPUHash/Sample/Shaders/GPUHash1To4FloatVisualizer.shader";
+        [SerializeField, Strings("hashwithoutsine41")]
+        private string _hashType;
+        private string _hashTypeDefault = "hashwithoutsine41";
+        public override string ShaderPath => _shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 
     [System.Serializable]
-    class GPUHashFloat2To1 : IGPUHashType
+    public class GPUHashFloat2To1 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { fast, hashwithoutsine12, ign, pseudo, trig }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash2To1FloatVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath = "Assets/GPUHash/Sample/Shaders/GPUHash2To1FloatVisualizer.shader";
+        [SerializeField, Strings("fast", "hashwithoutsine12", "ign", "pseudo", "trig")]
+        private string _hashType;
+        private string _hashTypeDefault = "fast";
+        public override string ShaderPath => _shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 
     [System.Serializable]
-    class GPUHashUint2To1 : IGPUHashType
+    public class GPUHashUint2To1 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { city, iqint3, jkiss32, murmur3, superfast, xxhash32 }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash2To1UIntVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath = "Assets/GPUHash/Sample/Shaders/GPUHash2To1UIntVisualizer.shader";
+        [SerializeField, Strings("city", "iqint3", "jkiss32", "murmur3", "superfast", "xxhash32")]
+        private string _hashType;
+        private string _hashTypeDefault = "city";
+        public override string ShaderPath =>_shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 
     [System.Serializable]
-    class GPUHashFloat2To2 : IGPUHashType
+    public class GPUHashFloat2To2 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { hashwithoutsine22 }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash2To2FloatVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath = "Assets/GPUHash/Sample/Shaders/GPUHash2To2FloatVisualizer.shader";
+        [SerializeField, Strings("hashwithoutsine22")]
+        private string _hashType;
+        private string _hashTypeDefault = "hashwithoutsine22";
+        public override string ShaderPath => _shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 
     [System.Serializable]
-    class GPUHashUint2To2 : IGPUHashType
+    public class GPUHashUint2To2 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { pcg2d, tea }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash2To2UintVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath = "Assets/GPUHash/Sample/Shaders/GPUHash2To2UintVisualizer.shader";
+        [SerializeField, Strings("pcg2d", "tea")]
+        private string _hashType;
+        private string _hashTypeDefault = "pcg2d";
+        public override string ShaderPath =>_shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 
     [System.Serializable]
-    class GPUHashFloat2To3 : IGPUHashType
+    public class GPUHashFloat2To3 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { hashwithoutsine32 }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash2To3FloatVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath = "Assets/GPUHash/Sample/Shaders/GPUHash2To3FloatVisualizer.shader";
+        [SerializeField, Strings("hashwithoutsine32")]
+        private string _hashType;
+        private string _hashTypeDefault = "hashwithoutsine32";
+        public override string ShaderPath => _shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 
     [System.Serializable]
-    class GPUHashFloat2To4 : IGPUHashType
+    public class GPUHashFloat2To4 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { hashwithoutsine42 }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash2To4FloatVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath = "Assets/GPUHash/Sample/Shaders/GPUHash2To4FloatVisualizer.shader";
+        [SerializeField, Strings("hashwithoutsine32")]
+        private string _hashType;
+        private string _hashTypeDefault = "hashwithoutsine32";
+        public override string ShaderPath => _shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 
     [System.Serializable]
-    class GPUHashFloat3To1 : IGPUHashType
+    public class GPUHashFloat3To1 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { hashwithoutsine13 }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash3To1FloatVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath = "Assets/GPUHash/Sample/Shaders/GPUHash3To1FloatVisualizer.shader";
+        [SerializeField, Strings("hashwithoutsine13")]
+        private string _hashType;
+        private string _hashTypeDefault = "hashwithoutsine13";
+        public override string ShaderPath => _shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 
     [System.Serializable]
-    class GPUHashUint3To1 : IGPUHashType
+    public class GPUHashUint3To1 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { city, superfast, xxhash32, murmur3 }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash3To1UIntVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath = "Assets/GPUHash/Sample/Shaders/GPUHash3To1UIntVisualizer.shader";
+        [SerializeField, Strings("city", "superfast", "xxhash32", "murmur3")]
+        private string _hashType;
+        private string _hashTypeDefault = "city";
+        public override string ShaderPath =>_shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 
     [System.Serializable]
-    class GPUHashFloat3To2 : IGPUHashType
+    public class GPUHashFloat3To2 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { hashwithoutsine23 }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash3To2FloatVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath = "Assets/GPUHash/Sample/Shaders/GPUHash3To2FloatVisualizer.shader";
+        [SerializeField, Strings("hashwithoutsine23")]
+        private string _hashType;
+        private string _hashTypeDefault = "hashwithoutsine23";
+        public override string ShaderPath => _shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 
     [System.Serializable]
-    class GPUHashFloat3To3 : IGPUHashType
+    public class GPUHashFloat3To3 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { hashwithoutsine33 }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash3To3FloatVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath = "Assets/GPUHash/Sample/Shaders/GPUHash3To3FloatVisualizer.shader";
+        [SerializeField, Strings("hashwithoutsine33")]
+        private string _hashType;
+        private string _hashTypeDefault = "hashwithoutsine33";
+        public override string ShaderPath => _shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 
     [System.Serializable]
-    class GPUHashUint3To3 : IGPUHashType
+    public class GPUHashUint3To3 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { iqint2, pcg3d, pcg3d16 }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash3To3UintVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath = "Assets/GPUHash/Sample/Shaders/GPUHash3To3UintVisualizer.shader";
+        [SerializeField, Strings("iqint2", "pcg3d", "pcg3d16")]
+        private string _hashType;
+        private string _hashTypeDefault = "iqint2";
+        public override string ShaderPath =>_shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 
     [System.Serializable]
-    class GPUHashFloat3To4 : IGPUHashType
+    public class GPUHashFloat3To4 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { hashwithoutsine43 }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash3To4FloatVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath = "Assets/GPUHash/Sample/Shaders/GPUHash3To4FloatVisualizer.shader";
+        [SerializeField, Strings("hashwithoutsine43")]
+        private string _hashType;
+        private string _hashTypeDefault = "hashwithoutsine43";
+        public override string ShaderPath => _shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 
     [System.Serializable]
-    class GPUHashUint4To1 : IGPUHashType
+    public class GPUHashUint4To1 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { city, hybridtaus, murmur3, superfast, xorshift128, xxhash32 }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash4To1UIntVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath = "Assets/GPUHash/Sample/Shaders/GPUHash4To1UIntVisualizer.shader";
+        [SerializeField, Strings("city", "hybridtaus", "murmur3", "superfast", "xorshift128", "xxhash32")]
+        private string _hashType;
+        private string _hashTypeDefault = "city";
+        public override string ShaderPath =>_shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 
     [System.Serializable]
-    class GPUHashFloat4To4 : IGPUHashType
+    public class GPUHashFloat4To4 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { hashwithoutsine44 }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash4To4FloatVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath = "Assets/GPUHash/Sample/Shaders/GPUHash4To4FloatVisualizer.shader";
+        [SerializeField, Strings("hashwithoutsine44")]
+        private string _hashType;
+        private string _hashTypeDefault = "hashwithoutsine44";
+        public override string ShaderPath => _shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 
     [System.Serializable]
-    class GPUHashUint4to4 : IGPUHashType
+    public class GPUHashUint4to4 : GPUHashTypeBase
     {
-        public Hash _hash;
-        private Hash _preHash;
-        public enum Hash { md5, pcg4d }
-        private Action _onChangedHashType;
-        public string ShaderPath => "Assets/GPUHash/Sample/Shaders/GPUHash4To4UintVisualizer.shader";
-        public string HashType => _hash.ToString();
-        public string HashTypeDefault => ((Hash)0).ToString();
-        public void CheckHashType() { if (_hash != _preHash) { _onChangedHashType(); _preHash = _hash; } }
-        public Action OnChangedHashType { set => _onChangedHashType = value; }
+        private string _shaderPath = "Assets/GPUHash/Sample/Shaders/GPUHash4To4UintVisualizer.shader";
+        [SerializeField, Strings("md5", "pcg4d")]
+        private string _hashType;
+        private string _hashTypeDefault = "md5";
+        public override string ShaderPath =>_shaderPath;
+        public override string HashType => _hashType;
+        public override string HashTypeDefault => _hashTypeDefault;
     }
 }
