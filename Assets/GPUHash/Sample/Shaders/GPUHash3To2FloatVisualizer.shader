@@ -38,7 +38,8 @@
 
             float4 frag (v2f i) : SV_Target
             {
-                float2 c = hashwithoutsine23(float3(i.uv, 1.0));
+                float2 input = i.uv;
+                float2 c = hashwithoutsine23(float3(input, 1.0));
                 return float4(c, 1.0, 1.0);
             }
             ENDCG

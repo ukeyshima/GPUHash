@@ -38,7 +38,8 @@
 
             float4 frag (v2f i) : SV_Target
             {
-                float c = fast(i.uv);
+                float2 input = i.uv;
+                float c = fast(input);
                 return float4(c, c, c, 1.0);
             }
             ENDCG

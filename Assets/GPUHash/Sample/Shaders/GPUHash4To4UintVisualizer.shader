@@ -38,7 +38,8 @@
 
             float4 frag (v2f i) : SV_Target
             {
-                float4 c = md5(i.vertex) / float(0xffffffffu);
+                uint2 input = i.vertex.xy;
+                float4 c = md5(uint4(input, 1, 1)) / float(0xffffffffu);
                 return c;
             }
             ENDCG

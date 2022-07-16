@@ -38,7 +38,8 @@
 
             float4 frag (v2f i) : SV_Target
             {
-                float3 c = iqint2(i.vertex.xyz) / float(0xffffffffu);
+                uint2 input = i.vertex.xy;
+                float3 c = iqint2(uint3(input, 1)) / float(0xffffffffu);
                 return float4(c, 1.0);
             }
             ENDCG

@@ -38,7 +38,8 @@
 
             float4 frag (v2f i) : SV_Target
             {
-                float c = city(i.vertex) / float(0xffffffffu);
+                uint2 input = i.vertex.xy;
+                float c = city(uint4(input, 1, 1)) / float(0xffffffffu);
                 return float4(c, c, c, 1.0);
             }
             ENDCG

@@ -11,19 +11,32 @@ namespace GPUHash.Sample
         string ShaderPath { get; }
         string HashType { get; }
         string HashTypeDefault { get; }
+        Vector2 InputShift { get; }
+        Vector2 InputScale { get; }
         Action OnChangedHashType { set; }
         void CheckHashType();
+        Action OnChangedInput { set; }
+        void CheckInput();
     }
 
     public class GPUHashTypeBase : IGPUHashType
     {
+        [SerializeField] private Vector2 _inputShift = new Vector2(0, 0);
+        [SerializeField] private Vector2 _inputScale = new Vector2(1, 1);
         private string _preHashType;
+        private Vector2 _preShift = new Vector2(0, 0);
+        private Vector2 _preScale = new Vector2(1, 1);
         private Action _onChangedHashType;
+        private Action _onChangedInput;
         public virtual string ShaderPath => "";
         public virtual string HashType => "";
         public virtual string HashTypeDefault => "";
+        public Vector2 InputShift => _inputShift;
+        public Vector2 InputScale => _inputScale;
         public Action OnChangedHashType { set => _onChangedHashType = value; }
         public void CheckHashType(){ if (HashType != _preHashType) { _onChangedHashType(); _preHashType = HashType; } }
+        public Action OnChangedInput { set => _onChangedInput = value; }
+        public void CheckInput(){ if (InputShift != _preShift || InputScale != _preScale) { _onChangedInput(); _preShift = InputShift; _preScale = InputScale;} }
     }
 
     [System.Serializable]

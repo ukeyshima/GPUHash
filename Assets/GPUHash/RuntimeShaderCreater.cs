@@ -31,9 +31,33 @@ namespace GPUHash.Sample
             callBack(shader);
         }
 
+        public async Task Update(string regex, string replaceText, Action<Shader> callBack)
+        {
+            string baseShaderString = await ReadAsync(Application.dataPath + "/Resources/" + _fileName + ".shader");
+            string shaderString = Regex.Replace(baseShaderString, regex, replaceText);
+            await WriteAsync(Application.dataPath + "/Resources/" + _fileName + ".shader", shaderString);
+
+#if UNITY_EDITOR
+            UnityEditor.AssetDatabase.Refresh();
+#endif
+
+            Shader shader = Resources.Load(_fileName) as Shader;
+            callBack(shader);
+        }
+
         public void Dispose()
         {
             File.Delete(Application.dataPath + "/Resources/" + _fileName + ".shader");
+        }
+
+        private async Task<string> ReadAsync(string path)
+        {
+            using (var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Read))
+            using (var sr = new StreamReader(fs))
+            {
+                var text = await sr.ReadToEndAsync();
+                return text;
+            }
         }
 
         private async Task WriteAsync(string path, string text)
