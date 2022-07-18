@@ -11,6 +11,9 @@ namespace GPUHash.Sample
     {
         private string _baseShaderString;
         private string _fileName;
+        private bool _enableWrite = true;
+
+        public bool EnableWrite { get => _enableWrite; }
 
         public RuntimeShaderCreator(string baseShaderString, string fileName)
         {
@@ -20,8 +23,11 @@ namespace GPUHash.Sample
 
         public async Task Create(string regex, string replaceText, Action<Shader> callBack)
         {
+            if(!_enableWrite) return;
             string shaderString = Regex.Replace(_baseShaderString, regex, replaceText);
+            _enableWrite = false;
             await WriteAsync(Application.dataPath + "/Resources/" + _fileName + ".shader", shaderString);
+            _enableWrite = true;
 
 #if UNITY_EDITOR
             UnityEditor.AssetDatabase.Refresh();
@@ -33,9 +39,12 @@ namespace GPUHash.Sample
 
         public async Task Update(string regex, string replaceText, Action<Shader> callBack)
         {
+            if(!_enableWrite) return;
             string baseShaderString = await ReadAsync(Application.dataPath + "/Resources/" + _fileName + ".shader");
             string shaderString = Regex.Replace(baseShaderString, regex, replaceText);
+            _enableWrite = false;
             await WriteAsync(Application.dataPath + "/Resources/" + _fileName + ".shader", shaderString);
+            _enableWrite = true;
 
 #if UNITY_EDITOR
             UnityEditor.AssetDatabase.Refresh();
