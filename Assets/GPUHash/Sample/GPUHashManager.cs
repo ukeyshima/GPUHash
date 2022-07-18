@@ -43,7 +43,7 @@ namespace GPUHash.Sample
             _iGPUHashType = CreateIGPUHashTypeInstance(_gpuHashType);
             _runTimeShaderCreator = new RuntimeShaderCreator(File.ReadAllText(_iGPUHashType.ShaderPath), "GPUHashVisualizer");
             _runTimeShaderCreator.Create(_iGPUHashType.HashTypeDefault, _iGPUHashType.HashType, shader => _quadRenderer.Mat = new Material(shader));
-            _iGPUHashType.OnChangedHashType = () => _runTimeShaderCreator.Create(_iGPUHashType.HashTypeDefault, _iGPUHashType.HashType, shader => _quadRenderer.Mat = new Material(shader));
+            _iGPUHashType.OnChangedHashType = () => _runTimeShaderCreator.Update(_iGPUHashType.HashTypePre, _iGPUHashType.HashType, shader => _quadRenderer.Mat = new Material(shader));
 
             if(_gpuHashType.ToString().Contains("Float"))
             {
