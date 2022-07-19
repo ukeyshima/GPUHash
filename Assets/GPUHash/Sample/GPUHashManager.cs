@@ -44,17 +44,17 @@ namespace GPUHash.Sample
         {
             _iGPUHashType = CreateIGPUHashTypeInstance(_gpuHashType);
             _runTimeShaderCreator = new RuntimeShaderCreator(File.ReadAllText(_iGPUHashType.ShaderPath), "GPUHashVisualizer");
-            _runTimeShaderCreator.Create(_iGPUHashType.HashTypeDefault, _iGPUHashType.HashType, shader => _quadRenderer.Mat = new Material(shader));
-            _iGPUHashType.OnChangedHashType = () => _runTimeShaderCreator.Update(_iGPUHashType.HashTypePre, _iGPUHashType.HashType, shader => _quadRenderer.Mat = new Material(shader));
-            _iGPUHashType.OnChangedOutputType = () => _runTimeShaderCreator.Update(@"return float4\(.*\);", GetFragmentShaderLastCode(_gpuHashType, _iGPUHashType.OutputType), shader => _quadRenderer.Mat = new Material(shader));
+            _runTimeShaderCreator.Create(_iGPUHashType.HashTypeDefault, _iGPUHashType.HashType, shader => { Destroy(_quadRenderer.Mat); _quadRenderer.Mat = new Material(shader); });
+            _iGPUHashType.OnChangedHashType = () => _runTimeShaderCreator.Update(_iGPUHashType.HashTypePre, _iGPUHashType.HashType, shader => { Destroy(_quadRenderer.Mat); _quadRenderer.Mat = new Material(shader); });
+            _iGPUHashType.OnChangedOutputType = () => _runTimeShaderCreator.Update(@"return float4\(.*\);", GetFragmentShaderLastCode(_gpuHashType, _iGPUHashType.OutputType), shader => { Destroy(_quadRenderer.Mat); _quadRenderer.Mat = new Material(shader); });
 
             if(_gpuHashType.ToString().Contains("Float"))
             {
-                _iGPUHashType.OnChangedInput = () => _runTimeShaderCreator.Update(@"i\.uv.*;(\n|\r)", $"i.uv * float2({_iGPUHashType.InputScale.x}, {_iGPUHashType.InputScale.y}) + float2({_iGPUHashType.InputShift.x}, {_iGPUHashType.InputShift.y});\n", shader => _quadRenderer.Mat = new Material(shader));
+                _iGPUHashType.OnChangedInput = () => _runTimeShaderCreator.Update(@"i\.uv.*;(\n|\r)", $"i.uv * float2({_iGPUHashType.InputScale.x}, {_iGPUHashType.InputScale.y}) + float2({_iGPUHashType.InputShift.x}, {_iGPUHashType.InputShift.y});\n", shader => { Destroy(_quadRenderer.Mat); _quadRenderer.Mat = new Material(shader); });
             }
             else if(_gpuHashType.ToString().Contains("Uint"))
             {
-                _iGPUHashType.OnChangedInput = () => _runTimeShaderCreator.Update(@"i\.vertex\.xy.*;(\n|\r)", $"i.vertex.xy * uint2({_iGPUHashType.InputScale.x}, {_iGPUHashType.InputScale.y}) + uint2({_iGPUHashType.InputShift.x}, {_iGPUHashType.InputShift.y});\n", shader => _quadRenderer.Mat = new Material(shader));
+                _iGPUHashType.OnChangedInput = () => _runTimeShaderCreator.Update(@"i\.vertex\.xy.*;(\n|\r)", $"i.vertex.xy * uint2({_iGPUHashType.InputScale.x}, {_iGPUHashType.InputScale.y}) + uint2({_iGPUHashType.InputShift.x}, {_iGPUHashType.InputShift.y});\n", shader => { Destroy(_quadRenderer.Mat); _quadRenderer.Mat = new Material(shader); });
             }
         }
 

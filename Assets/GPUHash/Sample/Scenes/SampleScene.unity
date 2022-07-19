@@ -206,7 +206,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _quad: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-  _mat: {fileID: 2100000, guid: b641996afce1147c9a3dac8f3b53224d, type: 2}
+  _shader: {fileID: 4800000, guid: 746bacf5795ab47fd91454b4de8b074f, type: 3}
 --- !u!4 &429401640
 Transform:
   m_ObjectHideFlags: 0

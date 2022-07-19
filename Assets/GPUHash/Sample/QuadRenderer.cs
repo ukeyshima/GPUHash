@@ -7,13 +7,18 @@ namespace GPUHash.Sample
     public class QuadRenderer : MonoBehaviour
     {
         [SerializeField] private Mesh _quad;
-        [SerializeField] private Material _mat;
+        [SerializeField] private Shader _shader;
 
+        private Material _mat;
         private Matrix4x4 _quadMatrix = Matrix4x4.identity;
         private Vector2Int _screenResolution = new Vector2Int(0, 0);
 
-        public Material Mat { set => _mat = value; }
+        public Material Mat { get => _mat; set => _mat = value; }
 
+        private void Awake()
+        {
+            _mat = new Material(_shader);
+        }
 
         private void Update()
         {
@@ -30,6 +35,11 @@ namespace GPUHash.Sample
             float height = Camera.main.orthographicSize * 2;
             float width = height * aspectRatio;
             _quadMatrix.SetTRS(Vector3.zero, Quaternion.identity, new Vector3(width, Camera.main.orthographicSize * 2, 0));
+        }
+
+        private void OnDestroy()
+        {
+            Destroy(_mat);
         }
     }
 
