@@ -47,11 +47,11 @@ namespace GPUHash.Sample
 
             if(_gpuHashType.ToString().Contains("Float"))
             {
-                _iGPUHashType.OnChangedInput = () => _runTimeShaderCreator.Update(@"i\.uv.*;\n", $"i.uv * float2({_iGPUHashType.InputScale.x}, {_iGPUHashType.InputScale.y}) + float2({_iGPUHashType.InputShift.x}, {_iGPUHashType.InputShift.y});\n", shader => _quadRenderer.Mat = new Material(shader));
+                _iGPUHashType.OnChangedInput = () => _runTimeShaderCreator.Update(@"i\.uv.*;(\n|\r)", $"i.uv * float2({_iGPUHashType.InputScale.x}, {_iGPUHashType.InputScale.y}) + float2({_iGPUHashType.InputShift.x}, {_iGPUHashType.InputShift.y});\n", shader => _quadRenderer.Mat = new Material(shader));
             }
             else if(_gpuHashType.ToString().Contains("Uint"))
             {
-                _iGPUHashType.OnChangedInput = () => _runTimeShaderCreator.Update(@"i\.vertex\.xy.*;\n", $"i.vertex.xy * uint2({_iGPUHashType.InputScale.x}, {_iGPUHashType.InputScale.y}) + uint2({_iGPUHashType.InputShift.x}, {_iGPUHashType.InputShift.y});\n", shader => _quadRenderer.Mat = new Material(shader));
+                _iGPUHashType.OnChangedInput = () => _runTimeShaderCreator.Update(@"i\.vertex\.xy.*;(\n|\r)", $"i.vertex.xy * uint2({_iGPUHashType.InputScale.x}, {_iGPUHashType.InputScale.y}) + uint2({_iGPUHashType.InputShift.x}, {_iGPUHashType.InputShift.y});\n", shader => _quadRenderer.Mat = new Material(shader));
             }
         }
 
