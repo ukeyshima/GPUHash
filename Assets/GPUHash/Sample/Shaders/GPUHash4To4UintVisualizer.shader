@@ -40,7 +40,7 @@
             {
                 uint2 input = i.vertex.xy;
                 float4 c = md5(uint4(input, 1, 1)) / float(0xffffffffu);
-                return c;
+                return float4(c);
             }
             ENDCG
         }

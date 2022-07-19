@@ -12,12 +12,15 @@ namespace GPUHash.Sample
         string HashType { get; }
         string HashTypePre { get; }
         string HashTypeDefault { get; }
+        string OutputType { get; }
         Vector2 InputShift { get; }
         Vector2 InputScale { get; }
         Action OnChangedHashType { set; }
         void CheckHashType();
         Action OnChangedInput { set; }
         void CheckInput();
+        Action OnChangedOutputType { set; }
+        void CheckOutputType();
     }
 
     public class GPUHashTypeBase : IGPUHashType
@@ -28,16 +31,21 @@ namespace GPUHash.Sample
         private Vector2 _preScale = new Vector2(1, 1);
         private Action _onChangedHashType;
         private Action _onChangedInput;
+        private Action _onChangedOutputType;
         public virtual string ShaderPath => "";
         public virtual string HashType => "";
         public virtual string HashTypePre { get => ""; set => _ = ""; }
         public virtual string HashTypeDefault => "";
+        public virtual string OutputType => "";
+        public virtual string OutputTypePre { get => ""; set => _ = ""; }
         public Vector2 InputShift => _inputShift;
         public Vector2 InputScale => _inputScale;
         public Action OnChangedHashType { set => _onChangedHashType = value; }
         public void CheckHashType(){ if (HashType != HashTypePre) { _onChangedHashType(); HashTypePre = HashType; } }
         public Action OnChangedInput { set => _onChangedInput = value; }
-        public void CheckInput(){ if (InputShift != _preShift || InputScale != _preScale) { _onChangedInput(); _preShift = InputShift; _preScale = InputScale;} }
+        public void CheckInput(){ if (InputShift != _preShift || InputScale != _preScale) { _onChangedInput(); _preShift = InputShift; _preScale = InputScale; } }
+        public Action OnChangedOutputType { set => _onChangedOutputType = value; }
+        public void CheckOutputType(){ if (OutputType != OutputTypePre) { _onChangedOutputType(); OutputTypePre = OutputType; } }
     }
 
     [System.Serializable]
@@ -48,10 +56,15 @@ namespace GPUHash.Sample
         private string _hashType = "hashwithoutsine11";
         private string _hashTypePre = "hashwithoutsine11";
         private string _hashTypeDefault = "hashwithoutsine11";
+        [SerializeField, Strings("Float1")]
+        private string _outputType = "Float1";
+        private string _outputTypePre = "Float1";
         public override string ShaderPath => _shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 
     [System.Serializable]
@@ -62,10 +75,15 @@ namespace GPUHash.Sample
         private string _hashType = "bbs";
         private string _hashTypePre = "bbs";
         private string _hashTypeDefault = "bbs";
+        [SerializeField, Strings("Float1")]
+        private string _outputType = "Float1";
+        private string _outputTypePre = "Float1";
         public override string ShaderPath => _shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 
     [System.Serializable]
@@ -76,10 +94,15 @@ namespace GPUHash.Sample
         private string _hashType = "hashwithoutsine21";
         private string _hashTypePre = "hashwithoutsine21";
         private string _hashTypeDefault = "hashwithoutsine21";
+        [SerializeField, Strings("Float1", "Float2")]
+        private string _outputType = "Float2";
+        private string _outputTypePre = "Float2";
         public override string ShaderPath => _shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 
     [System.Serializable]
@@ -90,10 +113,15 @@ namespace GPUHash.Sample
         private string _hashType = "hashwithoutsine31";
         private string _hashTypePre = "hashwithoutsine31";
         private string _hashTypeDefault = "hashwithoutsine31";
+        [SerializeField, Strings("Float1", "Float2", "Float3")]
+        private string _outputType = "Float3";
+        private string _outputTypePre = "Float3";
         public override string ShaderPath => _shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 
     [System.Serializable]
@@ -104,10 +132,15 @@ namespace GPUHash.Sample
         private string _hashType = "hashwithoutsine41";
         private string _hashTypePre = "hashwithoutsine41";
         private string _hashTypeDefault = "hashwithoutsine41";
+        [SerializeField, Strings("Float1", "Float2", "Float3", "Float4")]
+        private string _outputType = "Float4";
+        private string _outputTypePre = "Float4";
         public override string ShaderPath => _shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 
     [System.Serializable]
@@ -118,10 +151,15 @@ namespace GPUHash.Sample
         private string _hashType = "fast";
         private string _hashTypePre = "fast";
         private string _hashTypeDefault = "fast";
+        [SerializeField, Strings("Float1")]
+        private string _outputType = "Float1";
+        private string _outputTypePre = "Float1";
         public override string ShaderPath => _shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 
     [System.Serializable]
@@ -132,10 +170,15 @@ namespace GPUHash.Sample
         private string _hashType = "city";
         private string _hashTypePre = "city";
         private string _hashTypeDefault = "city";
+        [SerializeField, Strings("Float1")]
+        private string _outputType = "Float1";
+        private string _outputTypePre = "Float1";
         public override string ShaderPath =>_shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 
     [System.Serializable]
@@ -146,10 +189,15 @@ namespace GPUHash.Sample
         private string _hashType = "hashwithoutsine22";
         private string _hashTypePre = "hashwithoutsine22";
         private string _hashTypeDefault = "hashwithoutsine22";
+        [SerializeField, Strings("Float1", "Float2")]
+        private string _outputType = "Float2";
+        private string _outputTypePre = "Float2";
         public override string ShaderPath => _shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 
     [System.Serializable]
@@ -160,10 +208,15 @@ namespace GPUHash.Sample
         private string _hashType = "pcg2d";
         private string _hashTypePre = "pcg2d";
         private string _hashTypeDefault = "pcg2d";
+        [SerializeField, Strings("Float1", "Float2")]
+        private string _outputType = "Float2";
+        private string _outputTypePre = "Float2";
         public override string ShaderPath =>_shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 
     [System.Serializable]
@@ -174,10 +227,15 @@ namespace GPUHash.Sample
         private string _hashType = "hashwithoutsine32";
         private string _hashTypePre = "hashwithoutsine32";
         private string _hashTypeDefault = "hashwithoutsine32";
+        [SerializeField, Strings("Float1", "Float2", "Float3")]
+        private string _outputType = "Float3";
+        private string _outputTypePre = "Float3";
         public override string ShaderPath => _shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 
     [System.Serializable]
@@ -188,10 +246,15 @@ namespace GPUHash.Sample
         private string _hashType = "hashwithoutsine32";
         private string _hashTypePre = "hashwithoutsine32";
         private string _hashTypeDefault = "hashwithoutsine32";
+        [SerializeField, Strings("Float1", "Float2", "Float3", "Float4")]
+        private string _outputType = "Float4";
+        private string _outputTypePre = "Float4";
         public override string ShaderPath => _shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 
     [System.Serializable]
@@ -202,10 +265,15 @@ namespace GPUHash.Sample
         private string _hashType = "hashwithoutsine13";
         private string _hashTypePre = "hashwithoutsine13";
         private string _hashTypeDefault = "hashwithoutsine13";
+        [SerializeField, Strings("Float1")]
+        private string _outputType = "Float1";
+        private string _outputTypePre = "Float1";
         public override string ShaderPath => _shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 
     [System.Serializable]
@@ -216,10 +284,15 @@ namespace GPUHash.Sample
         private string _hashType = "city";
         private string _hashTypePre = "city";
         private string _hashTypeDefault = "city";
+        [SerializeField, Strings("Float1")]
+        private string _outputType = "Float1";
+        private string _outputTypePre = "Float1";
         public override string ShaderPath =>_shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 
     [System.Serializable]
@@ -230,10 +303,15 @@ namespace GPUHash.Sample
         private string _hashType = "hashwithoutsine23";
         private string _hashTypePre = "hashwithoutsine23";
         private string _hashTypeDefault = "hashwithoutsine23";
+        [SerializeField, Strings("Float1", "Float2")]
+        private string _outputType = "Float2";
+        private string _outputTypePre = "Float2";
         public override string ShaderPath => _shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 
     [System.Serializable]
@@ -244,10 +322,15 @@ namespace GPUHash.Sample
         private string _hashType = "hashwithoutsine33";
         private string _hashTypePre = "hashwithoutsine33";
         private string _hashTypeDefault = "hashwithoutsine33";
+        [SerializeField, Strings("Float1", "Float2", "Float3")]
+        private string _outputType = "Float3";
+        private string _outputTypePre = "Float3";
         public override string ShaderPath => _shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 
     [System.Serializable]
@@ -258,10 +341,15 @@ namespace GPUHash.Sample
         private string _hashType = "iqint2";
         private string _hashTypePre = "iqint2";
         private string _hashTypeDefault = "iqint2";
+        [SerializeField, Strings("Float1", "Float2", "Float3")]
+        private string _outputType = "Float3";
+        private string _outputTypePre = "Float3";
         public override string ShaderPath =>_shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 
     [System.Serializable]
@@ -272,10 +360,15 @@ namespace GPUHash.Sample
         private string _hashType = "hashwithoutsine43";
         private string _hashTypePre = "hashwithoutsine43";
         private string _hashTypeDefault = "hashwithoutsine43";
+        [SerializeField, Strings("Float1", "Float2", "Float3", "Float4")]
+        private string _outputType = "Float4";
+        private string _outputTypePre = "Float4";
         public override string ShaderPath => _shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 
     [System.Serializable]
@@ -286,10 +379,15 @@ namespace GPUHash.Sample
         private string _hashType = "city";
         private string _hashTypePre = "city";
         private string _hashTypeDefault = "city";
+        [SerializeField, Strings("Float1")]
+        private string _outputType = "Float1";
+        private string _outputTypePre = "Float1";
         public override string ShaderPath =>_shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 
     [System.Serializable]
@@ -300,10 +398,15 @@ namespace GPUHash.Sample
         private string _hashType = "hashwithoutsine44";
         private string _hashTypePre = "hashwithoutsine44";
         private string _hashTypeDefault = "hashwithoutsine44";
+        [SerializeField, Strings("Float1", "Float2", "Float3", "Float4")]
+        private string _outputType = "Float4";
+        private string _outputTypePre = "Float4";
         public override string ShaderPath => _shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 
     [System.Serializable]
@@ -314,9 +417,14 @@ namespace GPUHash.Sample
         private string _hashType = "md5";
         private string _hashTypePre = "md5";
         private string _hashTypeDefault = "md5";
+        [SerializeField, Strings("Float1", "Float2", "Float3", "Float4")]
+        private string _outputType = "Float4";
+        private string _outputTypePre = "Float4";
         public override string ShaderPath =>_shaderPath;
         public override string HashType => _hashType;
         public override string HashTypePre { get => _hashTypePre; set => _hashTypePre = value; }
         public override string HashTypeDefault => _hashTypeDefault;
+        public override string OutputType => _outputType;
+        public override string OutputTypePre { get => _outputTypePre; set => _outputTypePre = value; }
     }
 }

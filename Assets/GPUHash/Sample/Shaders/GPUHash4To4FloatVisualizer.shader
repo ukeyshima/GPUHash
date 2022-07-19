@@ -40,7 +40,7 @@
             {
                 float2 input = i.uv;
                 float4 c = hashwithoutsine44(float4(input, 1.0, 1.0));
-                return c;
+                return float4(c);
             }
             ENDCG
         }
