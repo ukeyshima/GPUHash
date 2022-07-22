@@ -44,7 +44,7 @@ namespace GPUHash.Sample
         {
             _iGPUHashType = CreateIGPUHashTypeInstance(_gpuHashType);
             _runTimeShaderCreator = new RuntimeShaderCreator(File.ReadAllText(_iGPUHashType.ShaderPath), "GPUHashVisualizer");
-            _runTimeShaderCreator.Create(_iGPUHashType.HashTypeDefault, _iGPUHashType.HashType, shader => { Destroy(_quadRenderer.Mat); _quadRenderer.Mat = new Material(shader); });
+            _runTimeShaderCreator.Create(_iGPUHashType.HashTypePre, _iGPUHashType.HashType, shader => { Destroy(_quadRenderer.Mat); _quadRenderer.Mat = new Material(shader); });
             _iGPUHashType.OnChangedHashType = () => _runTimeShaderCreator.Update(_iGPUHashType.HashTypePre, _iGPUHashType.HashType, shader => { Destroy(_quadRenderer.Mat); _quadRenderer.Mat = new Material(shader); });
             _iGPUHashType.OnChangedOutputType = () => _runTimeShaderCreator.Update(@"return float4\(.*\);", GetFragmentShaderLastCode(_gpuHashType, _iGPUHashType.OutputType), shader => { Destroy(_quadRenderer.Mat); _quadRenderer.Mat = new Material(shader); });
 
