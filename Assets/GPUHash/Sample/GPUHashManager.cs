@@ -8,9 +8,9 @@ namespace GPUHash.Sample
 {
     public class GPUHashManager : MonoBehaviour
     {
-        private const int SHADER_INPUT_COLUMN = 39;
-        private const int SHADER_HASH_FUNCTION_COLUMN = 40;
-        private const int SHADER_LAST_COLUMN = 41;
+        private const int SHADER_INPUT_COLUMN = 40;
+        private const int SHADER_HASH_FUNCTION_COLUMN = 41;
+        private const int SHADER_LAST_COLUMN = 42;
         private const string BASE_SHADERPATH = "Assets/GPUHash/Sample/Shaders/GPUHashVisualizer.shader";
 
         [SerializeField] private GPUHashType _gpuHashType;
@@ -48,7 +48,7 @@ namespace GPUHash.Sample
             _iGPUHashType = CreateIGPUHashTypeInstance(_gpuHashType);
 
             string baseShaderString = GetBaseShaderString();
-            
+
             _runTimeShaderCreator = new RuntimeShaderCreator(baseShaderString,
                 "GPUHashVisualizer",
                 shader =>
@@ -122,13 +122,29 @@ namespace GPUHash.Sample
             baseShaderString = string.Join("\n", shaderColumns);
             return baseShaderString;
         }
-        
+
         private string GetShaderInputColumn()
         {
-            (string type, string uvOrCoord) = _gpuHashType.ToString().Contains("Float") ? ("float", "i.uv") : ("uint", "i.vertex.xy");
+            (string type, string toUV) = _gpuHashType.ToString().Contains("Float") ? ("float", $"/float2({Screen.width}, {Screen.height})") : ("uint", "");
+            int inputTypeNumDefault = Int32.Parse(Regex.Match(_gpuHashType.ToString(), @"\dTo\d").Value[0].ToString());
 
-            return
-                $"                {type}{2} input = {uvOrCoord} * {type}{2}({_iGPUHashType.InputScale.x}, {_iGPUHashType.InputScale.y}) + {type}{2}({_iGPUHashType.InputShift.x}, {_iGPUHashType.InputShift.y});";
+            string scale = inputTypeNumDefault switch
+            {
+                1 => $"{type}({_iGPUHashType.InputScale.x})",
+                2 => $"{type}{inputTypeNumDefault}({_iGPUHashType.InputScale.x}, {_iGPUHashType.InputScale.y})",
+                3 => $"{type}{inputTypeNumDefault}({_iGPUHashType.InputScale.x}, {_iGPUHashType.InputScale.y}, 1)",
+                4 => $"{type}{inputTypeNumDefault}({_iGPUHashType.InputScale.x}, {_iGPUHashType.InputScale.y}, 1, 1)"
+            };
+
+            string shift = inputTypeNumDefault switch
+            {
+                1 => $"{type}({_iGPUHashType.InputShift.x})",
+                2 => $"{type}{inputTypeNumDefault}({_iGPUHashType.InputShift.x}, {_iGPUHashType.InputShift.y})",
+                3 => $"{type}{inputTypeNumDefault}({_iGPUHashType.InputShift.x}, {_iGPUHashType.InputShift.y}, 0)",
+                4 => $"{type}{inputTypeNumDefault}({_iGPUHashType.InputShift.x}, {_iGPUHashType.InputShift.y}, 0, 0)"
+            };
+
+            return $@"                {type}{inputTypeNumDefault} input = (seed * {scale} + {shift}){toUV};";
         }
 
         private string GetShaderHashFunctionColumn()
@@ -141,8 +157,8 @@ namespace GPUHash.Sample
             {
                 1 => "input.x",
                 2 => "input.xy",
-                3 => "input.xy, 1",
-                4 => "input.xy, 1, 1",
+                3 => "input.xyz",
+                4 => "input",
                 _ => throw new ArgumentOutOfRangeException()
             };
 

@@ -37,8 +37,9 @@
 
             float4 frag (v2f i) : SV_Target
             {
-                float2 input = i.uv;
-                float c = hashwithoutsine11(input.x);
+                uint4 seed = uint4(i.vertex.x, i.vertex.y, uint(i.vertex.x) ^ uint(i.vertex.y), i.vertex.x + i.vertex.y);
+                uint3 input = seed.xyz;
+                float c = pcg3d(input);
                 return float4(c, c, c, 1.0);
             }
             ENDCG
