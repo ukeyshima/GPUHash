@@ -65,7 +65,7 @@ namespace GPUHash.Sample
                     _quadRenderer.Mat = new Material(shader);
                 });
             _iGPUHashType.OnChangedOutputType = () => _runTimeShaderCreator.Update(SHADER_LAST_COLUMN,
-                GetShaderLastColumn(_iGPUHashType.OutputType),
+                GetShaderLastColumn(_iGPUHashType.OutputTypeString),
                 shader =>
                 {
                     Destroy(_quadRenderer.Mat);
@@ -118,7 +118,7 @@ namespace GPUHash.Sample
             shaderColumns[SHADER_HASH_FUNCTION_COLUMN] = GetShaderHashFunctionColumn();
             baseShaderString = string.Join("\n", shaderColumns);
             shaderColumns = baseShaderString.Split("\n");
-            shaderColumns[SHADER_LAST_COLUMN] = GetShaderLastColumn(_iGPUHashType.OutputType);
+            shaderColumns[SHADER_LAST_COLUMN] = GetShaderLastColumn(_iGPUHashType.OutputTypeString);
             baseShaderString = string.Join("\n", shaderColumns);
             return baseShaderString;
         }
@@ -147,7 +147,7 @@ namespace GPUHash.Sample
             };
 
             return
-                $"                float{(outputTypeNumDefault == 1 ? "" : outputTypeNumDefault)} c = {_iGPUHashType.HashType}({type}{(inputTypeNumDefault == 1 ? "" : inputTypeNumDefault)}({argument})){toFloat};";
+                $"                float{(outputTypeNumDefault == 1 ? "" : outputTypeNumDefault)} c = {_iGPUHashType.HashTypeString}({type}{(inputTypeNumDefault == 1 ? "" : inputTypeNumDefault)}({argument})){toFloat};";
         }
 
         private string GetShaderLastColumn(string outputType)
