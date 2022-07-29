@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -9,22 +10,20 @@ namespace GPUHash.Sample
 {
     public class RuntimeShaderCreator : IDisposable
     {
-        private string _baseShaderString;
+        private string _shaderString;
         private string _fileName;
         private bool _enableWrite = true;
 
-        public bool EnableWrite { get => _enableWrite; }
-
-        public RuntimeShaderCreator(string baseShaderString, string fileName)
+        public RuntimeShaderCreator(string baseShaderString, string fileName, Action<Shader> callBack)
         {
-            _baseShaderString = baseShaderString;
+            _shaderString = baseShaderString;
             _fileName = fileName;
+            Create(baseShaderString, callBack);
         }
 
-        public async Task Create(string regex, string replaceText, Action<Shader> callBack)
+        private async Task Create(string shaderString, Action<Shader> callBack)
         {
-            if(!_enableWrite) return;
-            string shaderString = Regex.Replace(_baseShaderString, regex, replaceText);
+            if (!_enableWrite) return;
             _enableWrite = false;
             await WriteAsync(Application.dataPath + "/Resources/" + _fileName + ".shader", shaderString);
             _enableWrite = true;
@@ -37,13 +36,32 @@ namespace GPUHash.Sample
             callBack(shader);
         }
 
+        public async Task Update(int columnNum, string replaceText, Action<Shader> callBack)
+        {
+            if (!_enableWrite) return;
+            _shaderString = await ReadAsync(Application.dataPath + "/Resources/" + _fileName + ".shader");
+            string[] shaderColumns = _shaderString.Split("\n");
+            shaderColumns[columnNum] = replaceText;
+            _shaderString = string.Join("\n", shaderColumns);
+            _enableWrite = false;
+            await WriteAsync(Application.dataPath + "/Resources/" + _fileName + ".shader", _shaderString);
+            _enableWrite = true;
+
+#if UNITY_EDITOR
+            UnityEditor.AssetDatabase.Refresh();
+#endif
+
+            Shader shader = Resources.Load(_fileName) as Shader;
+            callBack(shader);
+        }
+
         public async Task Update(string regex, string replaceText, Action<Shader> callBack)
         {
-            if(!_enableWrite) return;
-            string baseShaderString = await ReadAsync(Application.dataPath + "/Resources/" + _fileName + ".shader");
-            string shaderString = Regex.Replace(baseShaderString, regex, replaceText);
+            if (!_enableWrite) return;
+            _shaderString = await ReadAsync(Application.dataPath + "/Resources/" + _fileName + ".shader");
+            _shaderString = Regex.Replace(_shaderString, regex, replaceText);
             _enableWrite = false;
-            await WriteAsync(Application.dataPath + "/Resources/" + _fileName + ".shader", shaderString);
+            await WriteAsync(Application.dataPath + "/Resources/" + _fileName + ".shader", _shaderString);
             _enableWrite = true;
 
 #if UNITY_EDITOR
