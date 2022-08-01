@@ -32,42 +32,23 @@ namespace GPUHash.Sample
     {
         string HashTypeString { get; }
         string OutputTypeString { get; }
-        Vector2 InputShift { get; }
-        Vector2 InputScale { get; }
+        IGPUHashInputType InputType { get; }
         Action OnChangedHashType { set; }
-        Action OnChangedInput { set; }
         Action OnChangedOutputType { set; }
         void CheckHashType();
-        void CheckInput();
         void CheckOutputType();
     }
 
     public abstract class GPUHashTypeBase : IGPUHashType
     {
-        [SerializeField] protected Vector2 _inputShift = new Vector2(0, 0);
-        [SerializeField] protected Vector2 _inputScale = new Vector2(1, 1);
-        protected Vector2 _preShift = new Vector2(0, 0);
-        protected Vector2 _preScale = new Vector2(1, 1);
         protected Action _onChangedHashType;
-        protected Action _onChangedInput;
         protected Action _onChangedOutputType;
         public abstract string HashTypeString { get; }
         public abstract string OutputTypeString { get; }
-        public Vector2 InputShift { get => _inputShift; }
-        public Vector2 InputScale { get => _inputScale; }
+        public abstract IGPUHashInputType InputType { get; }
         public Action OnChangedHashType { set => _onChangedHashType = value; }
-        public Action OnChangedInput { set => _onChangedInput = value; }
         public Action OnChangedOutputType { set => _onChangedOutputType = value; }
         public abstract void CheckHashType();
-
-        public void CheckInput()
-        {
-            if (InputShift == _preShift && InputScale == _preScale) return;
-            _onChangedInput();
-            _preShift = InputShift;
-            _preScale = InputScale;
-        }
-
         public abstract void CheckOutputType();
     }
 
@@ -78,8 +59,10 @@ namespace GPUHash.Sample
         private HashType _hashTypePre = HashType.hashwithoutsine11;
         [SerializeField] private OutputType _outputType = OutputType.Float1;
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput1();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {
@@ -113,8 +96,10 @@ namespace GPUHash.Sample
         private HashType _hashTypePre = HashType.bbs;
         [SerializeField] private OutputType _outputType = OutputType.Float1;
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput1();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {
@@ -159,8 +144,10 @@ namespace GPUHash.Sample
         private HashType _hashTypePre = HashType.hashwithoutsine21;
         [SerializeField] private OutputType _outputType = OutputType.Float1;
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput1();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {
@@ -195,8 +182,10 @@ namespace GPUHash.Sample
         private HashType _hashTypePre = HashType.hashwithoutsine31;
         [SerializeField] private OutputType _outputType = OutputType.Float1;
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput1();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {
@@ -233,8 +222,10 @@ namespace GPUHash.Sample
         private HashType _hashTypePre = HashType.hashwithoutsine41;
         [SerializeField] private OutputType _outputType = OutputType.Float1;
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput1();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {
@@ -272,8 +263,10 @@ namespace GPUHash.Sample
         private HashType _hashTypePre = HashType.fast;
         [SerializeField] private OutputType _outputType = OutputType.Float1;
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput2();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {
@@ -313,8 +306,10 @@ namespace GPUHash.Sample
         [SerializeField] private OutputType _outputType = OutputType.Float1;
 
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput2();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {
@@ -356,8 +351,10 @@ namespace GPUHash.Sample
         [SerializeField] private OutputType _outputType = OutputType.Float1;
 
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput2();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {
@@ -395,8 +392,10 @@ namespace GPUHash.Sample
         [SerializeField] private OutputType _outputType = OutputType.Float1;
 
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput2();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {
@@ -435,8 +434,10 @@ namespace GPUHash.Sample
         [SerializeField] private OutputType _outputType = OutputType.Float1;
 
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput2();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {
@@ -475,8 +476,10 @@ namespace GPUHash.Sample
         [SerializeField] private OutputType _outputType = OutputType.Float1;
 
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput2();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {
@@ -515,8 +518,10 @@ namespace GPUHash.Sample
         [SerializeField] private OutputType _outputType = OutputType.Float1;
 
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput3();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {
@@ -552,8 +557,10 @@ namespace GPUHash.Sample
         [SerializeField] private OutputType _outputType = OutputType.Float1;
 
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput3();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {
@@ -593,8 +600,10 @@ namespace GPUHash.Sample
         [SerializeField] private OutputType _outputType = OutputType.Float1;
 
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput3();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {
@@ -632,8 +641,10 @@ namespace GPUHash.Sample
         [SerializeField] private OutputType _outputType = OutputType.Float1;
 
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput3();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {
@@ -672,8 +683,10 @@ namespace GPUHash.Sample
         [SerializeField] private OutputType _outputType = OutputType.Float1;
 
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput3();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {
@@ -714,8 +727,10 @@ namespace GPUHash.Sample
         [SerializeField] private OutputType _outputType = OutputType.Float1;
 
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput3();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {
@@ -754,8 +769,10 @@ namespace GPUHash.Sample
 
         [SerializeField] private OutputType _outputType = OutputType.Float1;
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput4();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {
@@ -796,8 +813,10 @@ namespace GPUHash.Sample
         [SerializeField] private OutputType _outputType = OutputType.Float1;
 
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput4();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {
@@ -836,8 +855,10 @@ namespace GPUHash.Sample
         [SerializeField] private OutputType _outputType = OutputType.Float1;
 
         private OutputType _outputTypePre = OutputType.Float1;
+        [SerializeReference] private IGPUHashInputType _iGPUHashInputType = new GPUHashInput4();
         public override string HashTypeString { get => _hashType.ToString(); }
         public override string OutputTypeString { get => _outputType.ToString(); }
+        public override IGPUHashInputType InputType { get => _iGPUHashInputType; }
 
         public override void CheckOutputType()
         {

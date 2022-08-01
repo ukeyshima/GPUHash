@@ -55,6 +55,28 @@ namespace GPUHash.Sample
             callBack(shader);
         }
 
+        public async Task Update(int[] columnNum, string[] replaceText, Action<Shader> callBack)
+        {
+            if (!_enableWrite) return;
+            _shaderString = await ReadAsync(Application.dataPath + "/Resources/" + _fileName + ".shader");
+            string[] shaderColumns = _shaderString.Split("\n");
+            for (int i = 0; i < columnNum.Length; i++)
+            {
+                shaderColumns[columnNum[i]] = replaceText[i];
+            }
+            _shaderString = string.Join("\n", shaderColumns);
+            _enableWrite = false;
+            await WriteAsync(Application.dataPath + "/Resources/" + _fileName + ".shader", _shaderString);
+            _enableWrite = true;
+
+#if UNITY_EDITOR
+            UnityEditor.AssetDatabase.Refresh();
+#endif
+
+            Shader shader = Resources.Load(_fileName) as Shader;
+            callBack(shader);
+        }
+
         public async Task Update(string regex, string replaceText, Action<Shader> callBack)
         {
             if (!_enableWrite) return;

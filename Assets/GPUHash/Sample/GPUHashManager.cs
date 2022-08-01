@@ -8,9 +8,11 @@ namespace GPUHash.Sample
 {
     public class GPUHashManager : MonoBehaviour
     {
+        private const int SHADER_SEED_COLUMN = 39;
         private const int SHADER_INPUT_COLUMN = 40;
-        private const int SHADER_HASH_FUNCTION_COLUMN = 41;
-        private const int SHADER_LAST_COLUMN = 42;
+        private const int SHADER_INPUT_TRANSFORMATION_COLUMN = 41;
+        private const int SHADER_HASH_FUNCTION_COLUMN = 42;
+        private const int SHADER_LAST_COLUMN = 43;
         private const string BASE_SHADERPATH = "Assets/GPUHash/Sample/Shaders/GPUHashVisualizer.shader";
 
         [SerializeField] private GPUHashType _gpuHashType;
@@ -34,7 +36,7 @@ namespace GPUHash.Sample
                 _preGPUHashType = _gpuHashType;
             }
             _iGPUHashType.CheckHashType();
-            _iGPUHashType.CheckInput();
+            _iGPUHashType.InputType.CheckInputType();
             _iGPUHashType.CheckOutputType();
         }
 
@@ -71,8 +73,9 @@ namespace GPUHash.Sample
                     Destroy(_quadRenderer.Mat);
                     _quadRenderer.Mat = new Material(shader);
                 });
-            _iGPUHashType.OnChangedInput = () => _runTimeShaderCreator.Update(SHADER_INPUT_COLUMN,
-                GetShaderInputColumn(),
+            _iGPUHashType.InputType.OnChangedInputType = () => _runTimeShaderCreator.Update(
+                new int[] { SHADER_INPUT_COLUMN, SHADER_INPUT_TRANSFORMATION_COLUMN },
+                new string[] { GetShaderInputColumn(), GetShaderInputTransformationColumn() },
                 shader =>
                 {
                     Destroy(_quadRenderer.Mat);
@@ -112,7 +115,13 @@ namespace GPUHash.Sample
         {
             string baseShaderString = File.ReadAllText(BASE_SHADERPATH);
             string[] shaderColumns = baseShaderString.Split("\n");
+            shaderColumns[SHADER_SEED_COLUMN] = GetShaderSeedColumn();
+            baseShaderString = string.Join("\n", shaderColumns);
+            shaderColumns = baseShaderString.Split("\n");
             shaderColumns[SHADER_INPUT_COLUMN] = GetShaderInputColumn();
+            baseShaderString = string.Join("\n", shaderColumns);
+            shaderColumns = baseShaderString.Split("\n");
+            shaderColumns[SHADER_INPUT_TRANSFORMATION_COLUMN] = GetShaderInputTransformationColumn();
             baseShaderString = string.Join("\n", shaderColumns);
             shaderColumns = baseShaderString.Split("\n");
             shaderColumns[SHADER_HASH_FUNCTION_COLUMN] = GetShaderHashFunctionColumn();
@@ -123,28 +132,109 @@ namespace GPUHash.Sample
             return baseShaderString;
         }
 
+        private string GetShaderSeedColumn()
+        {
+            return _gpuHashType.ToString().Contains("Float")
+                ? "                float4 seed = float4(i.uv.x, i.uv.y, uint(i.uv.x) ^ uint(i.uv.y), i.uv.x + i.uv.y);"
+                : "                uint4 seed = uint4(i.vertex.x, i.vertex.y, uint(i.vertex.x) ^ uint(i.vertex.y), i.vertex.x + i.vertex.y);";
+        }
+
         private string GetShaderInputColumn()
         {
-            (string type, string toUV) = _gpuHashType.ToString().Contains("Float") ? ("float", $"/float2({Screen.width}, {Screen.height})") : ("uint", "");
+            string type = _gpuHashType.ToString().Contains("Float") ? "float" : "uint";
+            Vector4 inputScale = _iGPUHashType.InputType.InputShiftAndScale.InputScale;
+            Vector4 inputShift = _iGPUHashType.InputType.InputShiftAndScale.InputShift;
+
+            string scale =
+                $"{type}4({inputScale.x}, {inputScale.y}, {inputScale.z}, {inputScale.w})";
+
+            string shift =
+                $"{type}4({inputShift.x}, {inputShift.y}, {inputShift.z}, {inputShift.w})";
+
+            return $"                {type}4 input = (seed * {scale} + {shift});";
+        }
+
+        private string GetShaderInputTransformationColumn()
+        {
+            string inputTypeString = _iGPUHashType.InputType.InputTypeString;
             int inputTypeNumDefault = Int32.Parse(Regex.Match(_gpuHashType.ToString(), @"\dTo\d").Value[0].ToString());
+            int inputTypeNum = Int32.Parse(Regex.Match(inputTypeString, @"FloatOrUint\d").Value[^1].ToString());
+            string hashType = _iGPUHashType.HashTypeString;
+            string type = _gpuHashType.ToString().Contains("Float") ? "float" : "uint";
+            int linearOrXOROrNestOrOther = inputTypeString.Contains("Linear") ? 0 :
+                inputTypeString.Contains("XOR") ? 1 :
+                inputTypeString.Contains("Nest") ? 2 : 3;
 
-            string scale = inputTypeNumDefault switch
+            Vector4 inputCoefficient = _iGPUHashType.InputType.InputTransformation.InputCoefficient;
+
+            return linearOrXOROrNestOrOther switch
             {
-                1 => $"{type}({_iGPUHashType.InputScale.x})",
-                2 => $"{type}{inputTypeNumDefault}({_iGPUHashType.InputScale.x}, {_iGPUHashType.InputScale.y})",
-                3 => $"{type}{inputTypeNumDefault}({_iGPUHashType.InputScale.x}, {_iGPUHashType.InputScale.y}, 1)",
-                4 => $"{type}{inputTypeNumDefault}({_iGPUHashType.InputScale.x}, {_iGPUHashType.InputScale.y}, 1, 1)"
+                0 => inputTypeNumDefault switch
+                {
+                    1 => inputTypeNum switch
+                    {
+                        1 => $"                input = {type}4({inputCoefficient.x} * input.x + {inputCoefficient.y}, 0, 0, 0);",
+                        2 =>
+                            $"                input = {type}4({inputCoefficient.x} * input.x + {inputCoefficient.y} * input.y + {inputCoefficient.z}, 0, 0, 0);",
+                        3 =>
+                            $"                input = {type}4({inputCoefficient.x} * input.x + {inputCoefficient.y} * input.y + {inputCoefficient.z} * input.z + {inputCoefficient.w}, 0, 0, 0);",
+                    },
+                    2 => inputTypeNum switch
+                    {
+                        2 =>
+                            $"                input = {type}4({inputCoefficient.x} * input.x + {inputCoefficient.y} * input.y + {inputCoefficient.z}, input.y, 0, 0);",
+                        3 =>
+                            $"                input = {type}4({inputCoefficient.x} * input.x + {inputCoefficient.y} * input.y + {inputCoefficient.z} * input.z + {inputCoefficient.w}, input.y, 0, 0);",
+                    },
+                    3 => inputTypeNum switch
+                    {
+                        3 =>
+                            $"                input = {type}4({inputCoefficient.x} * input.x + {inputCoefficient.y} * input.y + {inputCoefficient.z} * input.z + {inputCoefficient.w}, input.y, input.z, 0);",
+                    },
+                },
+                1 => inputTypeNumDefault switch
+                {
+                    1 => inputTypeNum switch
+                    {
+                        2 => $"                input = {type}4(uint({inputCoefficient.x} * input.x) ^ uint({inputCoefficient.y} * input.y), 0, 0, 0);",
+                        3 =>
+                            $"                input = {type}4(uint({inputCoefficient.x} * input.x) ^ uint({inputCoefficient.y} * input.y) ^ uint({inputCoefficient.z} * input.z), 0, 0, 0);",
+                        4 =>
+                            $"                input = {type}4(uint({inputCoefficient.x} * input.x) ^ uint({inputCoefficient.y} * input.y) ^ uint({inputCoefficient.z} * input.z) ^ uint({inputCoefficient.w} * input.w), 0, 0, 0);",
+                    },
+                    2 => inputTypeNum switch
+                    {
+                        3 =>
+                            $"                input = {type}4(uint({inputCoefficient.x} * input.x) ^ uint({inputCoefficient.y} * input.y) ^ uint({inputCoefficient.z} * input.z), input.y, 0, 0);",
+                        4 =>
+                            $"                input = {type}4(uint({inputCoefficient.x} * input.x) ^ uint({inputCoefficient.y} * input.y) ^ uint({inputCoefficient.z} * input.z) ^ uint({inputCoefficient.w} * input.w), input.y, 0, 0);",
+                    },
+                    3 => inputTypeNum switch
+                    {
+                        4 =>
+                            $"                input = {type}4(uint({inputCoefficient.x} * input.x) ^ uint({inputCoefficient.y} * input.y) ^ uint({inputCoefficient.z} * input.z) ^ uint({inputCoefficient.w} * input.w), input.y, 0, 0);",
+                    },
+                },
+                2 => inputTypeNumDefault switch
+                {
+                    1 => inputTypeNum switch
+                    {
+                        2 => $"                input = {type}4(input.x + {hashType}(input.y), 0, 0, 0);",
+                        3 => $"                input = {type}4(input.x + {hashType}(input.y + {hashType}(input.z)), 0, 0, 0);",
+                        4 => $"                input = {type}4(input.x + {hashType}(input.y + {hashType}(input.z + {hashType}(input.w))), 0, 0, 0);",
+                    },
+                    2 => inputTypeNum switch
+                    {
+                        3 => $"                input = {type}4(input.x + {hashType}(input.y + {hashType}(input.z)), input.y, 0, 0);",
+                        4 => $"                input = {type}4(input.x + {hashType}(input.y + {hashType}(input.z + {hashType}(input.w))), input.y, 0, 0);",
+                    },
+                    3 =>inputTypeNum switch
+                    {
+                        4 => $"                input = {type}4(input.x + {hashType}(input.y + {hashType}(input.z + {hashType}(input.w))), input.y, input.z, 0);",
+                    },
+                },
+                3 => $"                input = {type}4(input.x, input.y, input.z, input.w);"
             };
-
-            string shift = inputTypeNumDefault switch
-            {
-                1 => $"{type}({_iGPUHashType.InputShift.x})",
-                2 => $"{type}{inputTypeNumDefault}({_iGPUHashType.InputShift.x}, {_iGPUHashType.InputShift.y})",
-                3 => $"{type}{inputTypeNumDefault}({_iGPUHashType.InputShift.x}, {_iGPUHashType.InputShift.y}, 0)",
-                4 => $"{type}{inputTypeNumDefault}({_iGPUHashType.InputShift.x}, {_iGPUHashType.InputShift.y}, 0, 0)"
-            };
-
-            return $@"                {type}{inputTypeNumDefault} input = (seed * {scale} + {shift}){toUV};";
         }
 
         private string GetShaderHashFunctionColumn()
@@ -174,7 +264,7 @@ namespace GPUHash.Sample
             {
                 1 => outputType switch
                 {
-                    "Float1" => "                return float4(c, c, c, 1.0);",
+                    "Float1" => "                return float4(c.xxx, 1.0);",
                 },
                 2 => outputType switch
                 {

@@ -38,11 +38,13 @@
             float4 frag (v2f i) : SV_Target
             {
                 uint4 seed = uint4(i.vertex.x, i.vertex.y, uint(i.vertex.x) ^ uint(i.vertex.y), i.vertex.x + i.vertex.y);
-                uint3 input = seed.xyz;
-                float c = pcg3d(input);
-                return float4(c, c, c, 1.0);
+                uint4 input = (seed * uint4(1, 1, 1, 1) + uint4(0, 0, 0, 0));
+                input = uint4(input.x, input.y, input.z, input.w);
+                float2 c = pcg2d(uint2(input.xy)) / float(0xffffffffu);
+                return float4(c.xxx, 1.0);
             }
             ENDCG
         }
     }
 }
+
