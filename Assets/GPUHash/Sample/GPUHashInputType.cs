@@ -147,7 +147,6 @@ namespace GPUHash.Sample
             FloatOrUint2Linear,
             FloatOrUint3Linear,
             FloatOrUint3XOR,
-            FloatOrUint3Nest,
             FloatOrUint4XOR,
             FloatOrUint4Nest
         }
@@ -160,7 +159,6 @@ namespace GPUHash.Sample
                 InputType.FloatOrUint2Linear => new InputShiftAndScale2(),
                 InputType.FloatOrUint3Linear => new InputShiftAndScale3(),
                 InputType.FloatOrUint3XOR => new InputShiftAndScale3(),
-                InputType.FloatOrUint3Nest => new InputShiftAndScale3(),
                 InputType.FloatOrUint4XOR => new InputShiftAndScale4(),
                 InputType.FloatOrUint4Nest => new InputShiftAndScale4()
             };
@@ -174,7 +172,6 @@ namespace GPUHash.Sample
                 InputType.FloatOrUint2Linear => new InputTransformationLinear2XOR3(),
                 InputType.FloatOrUint3Linear => new InputTransformationLinear3XOR4(),
                 InputType.FloatOrUint3XOR => new InputTransformationLinear2XOR3(),
-                InputType.FloatOrUint3Nest => new InputTransformationOther(),
                 InputType.FloatOrUint4XOR => new InputTransformationLinear3XOR4(),
                 InputType.FloatOrUint4Nest => new InputTransformationOther()
             };
@@ -220,7 +217,6 @@ namespace GPUHash.Sample
             FloatOrUint3,
             FloatOrUint3Linear,
             FloatOrUint4XOR,
-            FloatOrUint4Nest
         }
 
         private IInputShiftAndScale GetInputShiftAndScale()
@@ -230,7 +226,6 @@ namespace GPUHash.Sample
                 InputType.FloatOrUint3 => new InputShiftAndScale3(),
                 InputType.FloatOrUint3Linear => new InputShiftAndScale3(),
                 InputType.FloatOrUint4XOR => new InputShiftAndScale4(),
-                InputType.FloatOrUint4Nest => new InputShiftAndScale4()
             };
         }
 
@@ -241,7 +236,6 @@ namespace GPUHash.Sample
                 InputType.FloatOrUint3 => new InputTransformationOther(),
                 InputType.FloatOrUint3Linear => new InputTransformationLinear3XOR4(),
                 InputType.FloatOrUint4XOR => new InputTransformationLinear3XOR4(),
-                InputType.FloatOrUint4Nest => new InputTransformationOther()
             };
         }
     }

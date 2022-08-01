@@ -225,12 +225,7 @@ namespace GPUHash.Sample
                     },
                     2 => inputTypeNum switch
                     {
-                        3 => $"                input = {type}4(input.x + {hashType}(input.y + {hashType}(input.z)), input.y, 0, 0);",
-                        4 => $"                input = {type}4(input.x + {hashType}(input.y + {hashType}(input.z + {hashType}(input.w))), input.y, 0, 0);",
-                    },
-                    3 =>inputTypeNum switch
-                    {
-                        4 => $"                input = {type}4(input.x + {hashType}(input.y + {hashType}(input.z + {hashType}(input.w))), input.y, input.z, 0);",
+                        4 => $"                input = {type}4(input.xy + {hashType}(input.zw), 0, 0);",
                     },
                 },
                 3 => $"                input = {type}4(input.x, input.y, input.z, input.w);"
